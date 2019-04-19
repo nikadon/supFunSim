@@ -1,0 +1,403 @@
+#+TITLE: RunAll_figures.org
+
+
+
+* Example Figure description suffix
+
+  This figure was generated using an instance of EEGPlotting class
+  employing ~plotdeepsourcesasthalami~, ~plotbrainoutermesh~ and
+  ~plotsourcevisualization~ methods.
+
+* Find struct
+
+  FV:
+  - aparc+aseg.mgz
+  - lh.pial
+
+  #+BEGIN_SRC matlab  :session *MATLAB*  :eval yes :results raw drawer :tangle no
+
+structures = []
+
+structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'l-G_temporal_middle' ))]
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_temporal_middle' ))]
+
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'l-G_temporal_inf' ))]
+structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_temporal_inf' ))]
+
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'l-G_temp_sup-Lateral' ))]
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_temp_sup-Lateral' ))]
+
+structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_pariet_inf-Supramar' ))]
+
+structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'l-Pole_occipital' ))]
+structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-Pole_occipital' ))]
+
+structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'l-G_and_S_frontomargin' ))]
+structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_and_S_frontomargin' ))]
+
+structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_front_inf' ))]
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'l-G_front_inf' ))]
+
+structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_front_middle' ))]
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'l-G_front_middle' ))]
+
+structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_front_inf-Triangul' ))]
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'l-G_front_inf-Triangul' ))]
+
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_and_S_subcentral' ))]
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'l-G_and_S_subcentral' ))]
+
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'l-G_occipital_middle' ))]
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_occipital_middle' ))]
+
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'l-G_parietal_sup' ))]
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_parietal_sup' ))]
+
+
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_front_sup' ))]
+
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'l-G_orbital' ))]
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_orbital' ))]
+
+
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'l-G_precentral' ))]
+structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_precentral' ))]
+
+% structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'l-G_postcentral' ))]
+structures = [structures, find(strcmp( {reconstruction.MATS.sel_atl.Atlas(4).Scouts.Label}', 'r-G_postcentral' ))]
+
+
+
+disp( structures )
+
+  #+END_SRC
+
+* EEGParameters
+
+  #+BEGIN_SRC matlab  :session *MATLAB*  :eval yes :results silent :tangle no
+
+parameters = EEGParameters().generate();
+
+parameters(1).SEED    = 1;
+parameters(1).SEEDS   = [0, 0, 0, 0, 0];
+
+parameters(1).ERPs    = 0;
+
+
+parameters(1).rROI     = logical(0);     % random (1) or predefined (0) ROIs
+parameters(1).rPNT     = logical(0);     % random (1) or predefined (0) candidate points for source locations
+parameters(1).pROI     = structures;
+
+parameters(1).SRCS     = []; % Cortical sources (avoid placing more than 10 sources in single ROI)
+parameters(1).SRCS     = [ parameters(1).SRCS;  2  2  2 ];
+parameters(1).SRCS     = [ parameters(1).SRCS;  2  2  2 ];
+parameters(1).SRCS     = [ parameters(1).SRCS;  2  2  2 ];
+parameters(1).SRCS     = [ parameters(1).SRCS;  2  2  2 ];
+parameters(1).SRCS     = [ parameters(1).SRCS;  2  2  2 ];
+parameters(1).SRCS     = [ parameters(1).SRCS;  2  2  2 ];
+parameters(1).SRCS     = [ parameters(1).SRCS;  2  2  2 ];
+parameters(1).SRCS     = [ parameters(1).SRCS;  2  2  2 ];
+parameters(1).DEEP     = [                      6  6  6 ]; % deep sources
+
+parameters(1).thalamus = '';
+
+parameters(1).CUBE     = 20;   % perturbation of the leadfields based on the shift of source position within a cube of given edge length (centered at the original leadfields positions)
+parameters(1).CONE     = pi/16; % perturbation of the leadfields based on the rotation of source orientation (azimuth TH, elevation PHI)
+parameters(1).SCRN     = get(0, 'MonitorPositions'); % get screens positions
+parameters(1).DISP     = parameters(1).SCRN(end, :);        % force figures to be displayed on (the last) screenscreen
+parameters(1).DISP     = [ 10, 10, 999, 999 ];        % force figures to be displayed on (the last) screenscreen
+
+parameters(1).n00    = 1500;    % number of time samples per trial
+parameters(1).K00    = 1;
+parameters(1).P00    = 1;
+parameters(1).FRAC   = 0.20;
+parameters(1).STAB   = 0.99;
+parameters(1).RNG    = [0, 2.8];
+parameters(1).ITER   = 10;
+
+  #+END_SRC
+
+* EEGReconstruction
+
+  #+BEGIN_SRC matlab  :session *MATLAB*  :eval yes :results silent :tangle no
+
+filters = [ "LCMV" ];
+
+reconstruction = EEGReconstruction();
+reconstruction = reconstruction.init();
+
+for np = 1:1
+    parameter = parameters(np);
+    reconstruction = reconstruction.setparameters(parameter);
+    reconstruction = reconstruction.setsignals();
+    reconstruction = reconstruction.setleadfields();
+    reconstruction = reconstruction.setpreparations();
+    reconstruction = reconstruction.setfilters(filters);
+    reconstruction.save();
+end
+
+reconstruction = printaverageresults(reconstruction);
+
+  #+END_SRC
+
+* Figure 101: Volume conduction model essential components
+** Description
+
+   Volume conduction model essential components. Triangulation meshes
+   representing brain, skull and scalp boundaries with electrode
+   positions plotted on top of the scalp surface.
+   This figure was generated using an instance of
+   \textbf{\texttt{EEGPlotting}}
+   class
+   employing
+   \texttt{plotbrainoutermesh()},
+   \texttt{plotskulloutermesh()},
+   \texttt{plotscalpoutermesh()},
+   \texttt{plotelectrodepositioning()}
+   and
+   \texttt{plotelectrodelabels()}
+   methods.
+
+
+** Prepare
+
+   #+BEGIN_SRC matlab :session *MATLAB*  :eval yes :results silent :tangle no
+
+eegplot = EEGPlotting(reconstruction)
+eegplot.SETUP
+
+close all
+fig_101 = figure( 101 )
+
+set( gcf, 'Position', [ 10, 10, 1600, 1600 ] )
+set( gcf, 'Color', [1, 1, 1] )
+set( gcf, 'Renderer', 'painters'  )
+set( gcf, 'Name','Head model components' )
+set( gcf, 'PaperSize', [ 15, 15 ] )
+set( gcf, 'PaperUnits','centimeters' )
+
+eegplot.plotbrainoutermesh();
+eegplot.plotskulloutermesh();
+eegplot.plotscalpoutermesh();
+
+eegplot.plotelectrodepositioning();
+eegplot.plotelectrodelabels();
+
+if logical(0)
+    eegplot.plotcortexmesh();
+end
+
+if logical(0)
+    eegplot.plotdeepsourcesasthalami();
+    eegplot.plotROIvisualization();
+    eegplot.plotsourcevisualization();
+end
+
+
+ccrender([-160, 160], 'finish', 'matte')
+view(225,60)
+
+% legend
+
+if logical(1)
+    figName = 'fig_volume_conduction_model'
+    print( gcf, figName, '-r300', '-dpdf'  )
+    print( gcf, figName, '-r300', '-dpng'  )
+end
+
+   #+END_SRC
+
+* Figure 102: Cortex and ROIs
+** Description
+
+   Cortex and ROIs. Detailed cortical surface triangulation
+   with selected cortical patches.
+   This figure was generated using an instance of
+   \textbf{\texttt{EEGPlotting}}
+   class
+   employing
+   texttt{plotcortexmesh()}
+   and
+   texttt{plotROIvisualization()}
+   methods.
+
+** Prepare
+
+   #+BEGIN_SRC matlab :session *MATLAB*  :eval yes :results silent :tangle no
+
+eegplot = EEGPlotting(reconstruction)
+eegplot.SETUP
+
+close all
+fig_102 = figure( 102 )
+
+set( gcf, 'Position', [ 10, 10, 1600, 1600 ] )
+set( gcf, 'Color', [1, 1, 1] )
+set( gcf, 'Renderer', 'painters'  )
+set( gcf, 'Name', 'Cortex and ROIs' )
+set( gcf, 'PaperSize', [ 15, 15 ] )
+set( gcf, 'PaperUnits','centimeters' )
+
+if logical(0)
+    eegplot.plotbrainoutermesh();
+    eegplot.plotskulloutermesh();
+    eegplot.plotscalpoutermesh();
+
+    eegplot.plotelectrodepositioning();
+    eegplot.plotelectrodelabels();
+end
+
+eegplot.plotcortexmesh();
+eegplot.plotROIvisualization();
+eegplot.plotROIvisualization();
+
+if logical(0)
+    eegplot.plotdeepsourcesasthalami();
+    eegplot.plotsourcevisualization();
+end
+
+ccrender([-160, 160], 'finish', 'matte')
+view(225,60)
+
+% legend
+
+if logical(0)
+    figName = 'fig_Cortex_and_ROIs'
+    print( gcf, figName, '-r300', '-dpdf'  )
+    print( gcf, figName, '-r300', '-dpng'  )
+end
+
+   #+END_SRC
+
+* Figure 103: ROIs and thalami
+** Description
+
+   ROIs and thalami.
+   Cortical patches selected as a candidate ROIs for source position
+   with thalami mesh and scalp outer mesh.
+   This figure was generated using an instance of
+   \textbf{\texttt{EEGPlotting}}
+   class
+   employing
+   \texttt{plotROIvisualization()},
+   \texttt{plotdeepsourcesasthalami()}
+   and
+   \texttt{plotscalpoutermesh()}
+   methods.
+
+** Prepare
+
+   #+BEGIN_SRC matlab :session *MATLAB*  :eval yes :results silent :tangle no
+
+eegplot = EEGPlotting(reconstruction)
+eegplot.SETUP
+
+close all
+fig_103 = figure( 103 )
+
+set( gcf, 'Position', [ 10, 10, 1600, 1600 ] )
+set( gcf, 'Color', [1, 1, 1] )
+set( gcf, 'Renderer', 'painters'  )
+set( gcf, 'Name', 'ROIs and thalami' )
+set( gcf, 'PaperSize', [ 15, 15 ] )
+set( gcf, 'PaperUnits','centimeters' )
+
+if logical(0)
+    eegplot.plotbrainoutermesh();
+    eegplot.plotskulloutermesh();
+
+    eegplot.plotelectrodepositioning();
+    eegplot.plotelectrodelabels();
+    eegplot.plotcortexmesh();
+end
+
+eegplot.plotROIvisualization();
+eegplot.plotdeepsourcesasthalami();
+eegplot.plotscalpoutermesh();
+
+if logical(0)
+    eegplot.plotsourcevisualization();
+end
+
+ccrender([-160, 160], 'finish', 'matte')
+view(225,60)
+
+% legend
+
+if logical(0)
+    figName = 'fig_ROIs_and_thalami'
+    print( gcf, figName, '-r300', '-dpdf'  )
+    print( gcf, figName, '-r300', '-dpng'  )
+end
+
+   #+END_SRC
+
+* Figure 104: Bioelectrical activity positions and orientations
+** Description
+
+   Bioelectrical activity positions and orientations.
+   Cortical patches selected as a candidate ROIs for source position
+   with thalami mesh. Vectors representing direction of the dipole
+   moments for the sources of bio-electrical activity. Red lines
+   represent the activity of interest; blue -- the interfering
+   activity and black -- background activity.
+   Solid lines represent original sources
+   and dotted lines represent perturbed sources.
+   Arrows representing
+   dipole position and orientation are drawn not to scale.
+   This figure was generated using an instance of
+   \textbf{\texttt{EEGPlotting}}
+   class
+   employing
+   \texttt{plotROIvisualization()},
+   \texttt{plotdeepsourcesasthalami()}
+   and
+   \texttt{plotsourcevisualization()}
+   methods.
+
+** Prepare
+
+   #+BEGIN_SRC matlab :session *MATLAB*  :eval yes :results silent :tangle no
+
+eegplot = EEGPlotting(reconstruction)
+eegplot.SETUP
+
+close all
+fig_104 = figure( 104 )
+
+set( gcf, 'Position', [ 10, 10, 1600, 1600 ] )
+set( gcf, 'Color', [1, 1, 1] )
+set( gcf, 'Renderer', 'painters'  )
+set( gcf, 'Name', 'Bioelectrical activity positions and orientations' )
+set( gcf, 'PaperSize', [ 15, 15 ] )
+set( gcf, 'PaperUnits','centimeters' )
+
+if logical(0)
+    eegplot.plotbrainoutermesh();
+    eegplot.plotskulloutermesh();
+    eegplot.plotscalpoutermesh();
+
+    eegplot.plotelectrodepositioning();
+    eegplot.plotelectrodelabels();
+    eegplot.plotcortexmesh();
+end
+
+eegplot.plotROIvisualization();
+eegplot.plotdeepsourcesasthalami();
+eegplot.plotsourcevisualization();
+
+if logical(0)
+end
+
+ccrender([-160, 160], 'finish', 'matte')
+view(225,60)
+
+% legend
+
+if logical(1)
+    figName = 'fig_bioelectrical_activity'
+    print( gcf, figName, '-r300', '-dpdf'  )
+    print( gcf, figName, '-r300', '-dpng'  )
+end
+
+   #+END_SRC
