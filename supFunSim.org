@@ -414,7 +414,7 @@ SETUP.ERPs   = 5;       % Add ERPs (timelocked activity)
                         % SETUP.rROI   = 0;       % random (1) or predefined (0) ROIs
 SETUP.ELEC   = size(sel_ele.elecpos,1); % number of electrodes
 SETUP.n00    = 500;     % number of time samples per trial
-SETUP.K00    = 1;       % number of independent realizations of signal and noise based on generated MVAR model
+SETUP.K00    = 100;     % number of independent realizations of signal and noise based on generated MVAR model
                         % note: covariance matrix R of observed signal and noise covariance matrix N are estimated from samples originating
                         % from all realizations of signal and noise
 SETUP.P00    = 6;       % order of the MVAR model used to generate time-courses for signal of interest
@@ -3753,6 +3753,97 @@ Multiple runs for tangled matlab-scripts.
 
 * DONE Supplementaries
 ** DOIN [z00] Auxiliary functions
+*** EEGLAB Store
+
+
+#+BEGIN_SRC matlab :session *MATLAB* :eval no :tangle ./fun/store2eeglab2.m :results silent
+
+    function model = store2eeglab2(SETUP, MODEL, MATS)
+        tmp_EEG.setname     = '';
+        tmp_EEG.filename    = '';
+        tmp_EEG.filepath    = '';
+        tmp_EEG.subject     = '';
+        tmp_EEG.group       = '';
+        tmp_EEG.condition   = '';
+        tmp_EEG.session     = [];
+        tmp_EEG.comments    = '';
+        tmp_EEG.nbchan      = 0;
+        tmp_EEG.trials      = 0;
+        tmp_EEG.pnts        = 0;
+        tmp_EEG.srate       = 1;
+        tmp_EEG.xmin        = 0;
+        tmp_EEG.xmax        = 0;
+        tmp_EEG.times       = [];
+        tmp_EEG.data        = [];
+        tmp_EEG.icaact      = [];
+        tmp_EEG.icawinv     = [];
+        tmp_EEG.icasphere   = [];
+        tmp_EEG.icaweights  = [];
+        tmp_EEG.icachansind = [];
+        tmp_EEG.chanlocs    = [];
+        tmp_EEG.urchanlocs  = [];
+        tmp_EEG.chaninfo    = [];
+        tmp_EEG.ref         = [];
+        tmp_EEG.event       = [];
+        tmp_EEG.urevent     = [];
+        tmp_EEG.eventdescription = {};
+        tmp_EEG.epoch       = [];
+        tmp_EEG.epochdescription = {};
+        tmp_EEG.reject      = [];
+        tmp_EEG.stats       = [];
+        tmp_EEG.specdata    = [];
+        tmp_EEG.specicaact  = [];
+        tmp_EEG.splinefile  = '';
+        tmp_EEG.icasplinefile = '';
+        tmp_EEG.dipfit      = [];
+        tmp_EEG.history     = '';
+        tmp_EEG.saved       = 'no';
+        tmp_EEG.etc         = [];
+
+        tmp_sig_pre = permute(y_Pre, [2,1,3]);
+        tmp_sig_pst = permute(y_Pst, [2,1,3]);
+        tmp_sig_all = cat(2, tmp_sig_pre, tmp_sig_pst);
+
+        tmp_EEG.data        = tmp_sig_all;
+        tmp_EEG.nbchan      = size(tmp_sig_all, 1);
+        tmp_EEG.trials      = size(tmp_sig_all, 3);
+        tmp_EEG.pnts        = size(tmp_sig_all, 2);
+        tmp_EEG.srate       = SETUP.SRATE;
+
+        tmp_EEG.xmin        = (-size(tmp_sig_pre, 2) - 1)/tmp_EEG.srate;
+        tmp_EEG.xmax        = size(tmp_sig_pst, 2)/tmp_EEG.srate;
+        tmp_EEG.times       = linspace(tmp_EEG.xmin*1000, tmp_EEG.xmax*1000, tmp_EEG.pnts);
+
+
+        tmp_EEG.chanlocs = struct('labels', cellstr(char(sel_ele.label{:})));
+        tmp_X = num2cell(sel_ele.elecpos(:, 1));
+        tmp_Y = num2cell(sel_ele.elecpos(:, 2));
+        tmp_Z = num2cell(sel_ele.elecpos(:, 3));
+        [tmp_EEG.chanlocs.X] = tmp_X{:};
+        [tmp_EEG.chanlocs.Y] = tmp_Y{:};
+        [tmp_EEG.chanlocs.Z] = tmp_Z{:};
+
+        addpath([TMP_TOOLB_PATH,'eeglab/']);
+        eeglab
+
+        tmp_EEG = pop_chanedit( tmp_EEG, 'convert', 'cart2topo' )
+
+        [tmp_EEG.chanlocs(:).type] = deal('EEG');
+        [tmp_EEG.chanlocs(:).ref]  = deal('average');
+
+        tmp_EEG.ref         = 'averef'; % 'averef' | 'common'
+
+        EEG = tmp_EEG;
+
+
+        TEMP_NEW_SETNAME = 'test'
+        DIR_DATA_TARGET  = './'
+        pop_saveset(tmp_EEG,'filename',[TEMP_NEW_SETNAME,'.set'],'filepath',DIR_DATA_TARGET,'savemode','onefile')
+
+    end
+
+#+END_SRC
+
 *** =rawTimeSeries3d2d=
 
 #+BEGIN_SRC matlab :session *MATLAB* :eval no :tangle ./fun/rawTimeSeries3d2d.m :results silent
