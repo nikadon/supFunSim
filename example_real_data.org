@@ -1,0 +1,48 @@
+#+TITLE: ex_rData
+
+
+
+
+* INITIALIZE AND LOAD DATA
+
+#+BEGIN_SRC matlab :session *MATLAB* :eval yes :results silent :var DIR_PROJ_MAIN=(file-name-directory buffer-file-name) :tangle no
+
+clearvars TMP_TOOLB_PATH; if exist('~/toolboxes/','dir') == 7, TMP_TOOLB_PATH = '~/toolboxes/'; else, warningMessage = sprintf('CYBERCRAFT:: Warning:: toolboxes directory was not found (use ''~/toolboxes/'')'); end; if exist('TMP_TOOLB_PATH','var'), disp(['CYBERCRAFT:: looking for toolboxes in: ',TMP_TOOLB_PATH]), end;
+addpath([TMP_TOOLB_PATH,'eeglab/']);
+eeglab
+
+EEG = pop_loadset('filename','eeglab_data_epochs_ica.set','filepath',[TMP_TOOLB_PATH,'eeglab/sample_data/']);
+[ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG, 0 );
+
+eeglab('redraw')
+
+#+END_SRC
+
+
+* SELECT DATA for PRE AND POST EVENT ACTIVITY
+
+#+BEGIN_SRC matlab :session *MATLAB* :eval yes :results silent :var DIR_PROJ_MAIN=(file-name-directory buffer-file-name) :tangle no
+
+EEG_pre = pop_select( EEG,'time',[-1 0] );
+EEG_pre.setname = 'EEG_pre'
+
+EEG_pst = pop_select( EEG,'time',[0 1] );
+EEG_pst.setname = 'EEG_pst'
+
+[ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG_pre, 0 );
+[ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG_pst, 0 );
+
+eeglab('redraw')
+
+#+END_SRC
+
+
+* SUBSTITUTE
+
+#+BEGIN_SRC matlab :session *MATLAB* :eval yes :results silent :var DIR_PROJ_MAIN=(file-name-directory buffer-file-name) :tangle no
+
+y_Pre = permute(EEG_pre.data, [2,1,3]);
+y_Pst = permute(EEG_pst.data, [2,1,3]);
+
+
+#+END_SRC
