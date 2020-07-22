@@ -113,13 +113,18 @@ for i = 1:l_0
 
             % below: end of j = 1:length(lf) loop    
         end
-
+        
         [~, w]=max(RES_tmp{k});
+        % for simulated data only
+        % [dis dis_ind] = pdist2(pos_Src,structure.pos(w,:),'chebychev','Smallest',1);
 
         % store results
         RES(k).H = [RES(k).H lf{w}];
         RES(k).sources(i).candidate_number = w;
         RES(k).sources(i).rank_opt = rs;
+        % for simulated data only
+        % RES(k).sources(i).source_discovered = dis_ind;
+        % RES(k).sources(i).distance = dis;
 
         % below: end of k = 1:8 loop
     end
