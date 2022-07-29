@@ -12,7 +12,7 @@ jupyter-client==5.2.3
 jupyter-core==4.4.0
 matlab-kernel==0.15.1
 metakernel==0.20.14
-mistune==0.8.3
+mistune==2.0.3
 path.py==5.2
 pathlib==1.0.1
 pexpect==4.3.0
